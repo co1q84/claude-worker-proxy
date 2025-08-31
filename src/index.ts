@@ -50,11 +50,11 @@ async function handle(request: Request, env: any = {}): Promise<Response> {
         baseUrl,
         apiKey
     )
-    
+
     // 使用隐私代理进行请求（可选启用）
     const privacyProxy = new PrivacyProxy(env)
     const providerResponse = await privacyProxy.fetch(providerRequest)
-    
+
     return await provider.convertToClaudeResponse(providerResponse)
 }
 

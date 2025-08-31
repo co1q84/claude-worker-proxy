@@ -3,7 +3,8 @@
 ## 功能概述
 
 为claude-worker-proxy添加了基于SpectreProxy的隐私保护功能，可以：
-- ✅ 移除CF-*等隐私泄露头部
+
+- ✅ 移除CF-\*等隐私泄露头部
 - ✅ 使用Socket构建原始HTTP请求绕过地域限制
 - ✅ 支持SOCKS5代理规避网络检测
 - ✅ User-Agent随机化降低指纹识别
@@ -12,20 +13,23 @@
 ## 环境变量配置
 
 ### 启用隐私保护
+
 ```bash
 ENABLE_PRIVACY_PROTECTION=true
 ```
 
 ### SOCKS5代理配置
+
 ```bash
 # JSON数组格式
 SOCKS5_API_URLS=["https://proxy1.com/socks5","https://proxy2.com/socks5"]
 
-# 或逗号分隔格式  
+# 或逗号分隔格式
 SOCKS5_API_URLS=https://proxy1.com/socks5,https://proxy2.com/socks5
 ```
 
 ### 高级配置
+
 ```bash
 # User-Agent随机化
 ENABLE_USER_AGENT_RANDOMIZATION=true
@@ -49,7 +53,7 @@ HOST_STRATEGIES={
 
 - `socket_only`: 仅使用Socket代理
 - `socket_with_fallback`: Socket失败回退到fetch
-- `socks5_only`: 仅使用SOCKS5代理  
+- `socks5_only`: 仅使用SOCKS5代理
 - `socket_with_socks5`: Socket失败回退到SOCKS5
 - `direct`: 直接使用原生fetch（无隐私保护）
 - `auto`: 自动选择最佳策略
@@ -67,7 +71,7 @@ HOST_STRATEGIES={
                     ↓
              智能策略选择:
              - Socket代理 (移除CF-*头部)
-             - SOCKS5代理 (规避地域限制)  
+             - SOCKS5代理 (规避地域限制)
              - 原生fetch (回退策略)
 ```
 
