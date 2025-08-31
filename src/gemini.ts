@@ -10,9 +10,14 @@ export class impl implements provider.Provider {
         const endpoint = `models/${claudeRequest.model}:${claudeRequest.stream ? 'streamGenerateContent?alt=sse' : 'generateContent'}`
         const finalUrl = utils.buildUrl(baseUrl, endpoint)
 
-        const headers = new Headers(request.headers)
+        // Create minimal headers - remove client-identifying information
+        const headers = new Headers()
         headers.set('x-goog-api-key', apiKey)
         headers.set('Content-Type', 'application/json')
+        headers.set('User-Agent', 'python-requests/2.31.0')
+
+        // Log outbound request headers for verification (privacy-safe)
+        console.log('Outbound request headers to Gemini:', Object.fromEntries(headers.entries()))
 
         return new Request(finalUrl, {
             method: 'POST',
