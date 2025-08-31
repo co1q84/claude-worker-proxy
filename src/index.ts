@@ -1,11 +1,12 @@
 import * as provider from './provider'
 import * as gemini from './gemini'
 import * as openai from './openai'
+import { PrivacyProxy } from './privacy/privacy-proxy'
 
 export default {
     async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
         try {
-            return await handle(request)
+            return await handle(request, env)
         } catch (error) {
             console.error(error)
             return new Response('Internal server error', { status: 500 })
@@ -13,7 +14,7 @@ export default {
     }
 } satisfies ExportedHandler<Env>
 
-async function handle(request: Request): Promise<Response> {
+async function handle(request: Request, env: any = {}): Promise<Response> {
     if (request.method !== 'POST') {
         return new Response('Method not allowed', { status: 405 })
     }
@@ -49,7 +50,11 @@ async function handle(request: Request): Promise<Response> {
         baseUrl,
         apiKey
     )
-    const providerResponse = await fetch(providerRequest)
+    
+    // 使用隐私代理进行请求（可选启用）
+    const privacyProxy = new PrivacyProxy(env)
+    const providerResponse = await privacyProxy.fetch(providerRequest)
+    
     return await provider.convertToClaudeResponse(providerResponse)
 }
 
